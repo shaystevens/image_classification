@@ -7,7 +7,7 @@ from tensorflow.keras import datasets, layers, models
 (training_images, training_labels), (testing_images, testing_labels) = datasets.cifar10.load_data()
 training_images, testing_images = training_images / 255.0, testing_images / 255.0
 
-class_names =['Plane', 'Car', 'Bird', 'Car', 'Deer', 'Dog', 'Frog', 'Horse', 'Ship', 'Truck']
+class_names =['Plane', 'Car', 'Bird', 'Cat', 'Deer', 'Dog', 'Frog', 'Horse', 'Ship', 'Truck']
 
 for i in range(16):
     plt.subplot(4, 4, i + 1)
@@ -18,10 +18,10 @@ for i in range(16):
 
 plt.show()
 
-training_images = training_images[:20000]
-training_labels = training_labels[:20000]
-testing_images = testing_images[:4000]
-testing_labels = testing_labels[:4000]
+training_images = training_images[:40000]
+training_labels = training_labels[:40000]
+testing_images = testing_images[:8000]
+testing_labels = testing_labels[:8000]
 
 model = models.Sequential()
 model.add(layers.Conv2D(32, (3,3), activation='relu', input_shape=(32,32,3)))
@@ -36,3 +36,9 @@ model.add(layers.Dense(10, activation='softmax'))
 model.compile(optimizer="adam", loss='sparse_categorical_crossentropy',metrics=['accuracy'])
 
 model.fit(training_images, training_labels, epochs=10, validation_data=(testing_images, testing_labels))
+
+loss, accuracy = model.evaluate(testing_images, testing_labels)
+print(f":Loss: {loss}")
+print(f"Accuracy: {accuracy}")
+
+model.save("image_classifier.model")
